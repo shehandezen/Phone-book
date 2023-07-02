@@ -24,17 +24,15 @@ const contactSchema = new mongoose.Schema({
     },
   ],
   thumbnail: String,
-  postalAddresses: [
-    {
-      label: String,
-      address: String,
-      city: String,
-      region: String,
-      state: String,
-      postCode: String,
-      country: String,
-    },
-  ],
+  postalAddresses: {
+    label: String,
+    address: String,
+    city: String,
+    state: String,
+    postCode: String,
+    country: String,
+  },
+
   prefix: String,
 
   birthday: { year: Number, month: Number, day: Number },

@@ -18,6 +18,7 @@ const addContact = require("./routes/contacts/addContact");
 const updateContact = require("./routes/contacts/updateContact");
 const deleteContact = require("./routes/contacts/deleteContact");
 const auth = require("./routes/oauth/googleOauth");
+const getUserGoogle = require("./routes/user/getUserGoogle");
 const getUser = require("./routes/user/getUser");
 
 const app = express();
@@ -40,7 +41,7 @@ app.use("/contact", auth.isLoggedIn);
 app.use("/contacts", auth.isLoggedIn);
 
 // set port number
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 
 // connect server to the database
 dbConnect(process.env.MONGODB_URL);
@@ -53,6 +54,7 @@ app.use("/contacts", updateContact);
 app.use("/contacts", deleteContact);
 app.use("/google", auth.router);
 app.use("/user", getUser);
+app.use("/google/user", getUserGoogle);
 
 // api endpoints
 app.use("/", (req, res) => {

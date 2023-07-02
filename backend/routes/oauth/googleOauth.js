@@ -33,7 +33,7 @@ router.get(
   passport.authenticate("google", { failureRedirect: "/fail" }),
   (req, res) => {
     console.log("google callback url");
-    res.redirect(`/user/${req.user.id}`);
+    res.redirect(`/google/user/${req.user.id}`);
   }
 );
 
@@ -45,7 +45,5 @@ router.get("/logout", (req, res, next) => {
     res.redirect("/");
   }
 });
-
-
 
 module.exports = { router, isLoggedIn };
