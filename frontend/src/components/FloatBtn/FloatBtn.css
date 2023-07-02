@@ -1,0 +1,42 @@
+@import url("../../meta.css");
+
+.float-plus {
+  position: fixed;
+  width: 75px;
+  height: 75px;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--brand-color);
+  padding: 20px;
+  bottom: 25px;
+  right: 25px;
+  font-size: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: 0.5s;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.float-plus::before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  width: 30px;
+  height: 100%;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translateX(-60px) skewX(30deg);
+  transition: 0.5s ease-in-out;
+}
+
+.float-plus:hover:before {
+  transform: translateX(65px) skewX(30deg);
+}
+
+.float-plus svg {
+  width: 45px;
+  height: 45px;
+}

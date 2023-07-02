@@ -1,0 +1,108 @@
+@import url("../../meta.css");
+
+.Card {
+  position: relative;
+  width: 500px;
+  height: fit-content;
+  margin: 10px;
+  padding: 15px 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  /* border: 1px solid; */
+  cursor: pointer;
+  transition: 0.5s;
+  z-index: 10;
+}
+
+.Card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 6px 25px 0 rgba(0, 0, 0, 0.2), 0 8px 40px 0 rgba(0, 0, 0, 0.19);
+}
+
+.Card img {
+  position: relative;
+  right: 35px;
+  width: 100px;
+  border-radius: 15px;
+}
+
+.Card .description {
+  position: relative;
+  right: 5px;
+  width: 300px;
+  height: 75px;
+  /* border: 1px solid; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.Card .description div .name {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--font-color);
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+.Card .description div .phone-number {
+  font-size: 16px;
+  color: var(--small-text);
+  font-weight: 500;
+}
+
+.Card .description .arrow {
+  color: var(--brand-color);
+  font-weight: 800;
+}
+
+.Card .description .arrow svg {
+  width: 40px;
+  height: 40px;
+  transform: translateX(-20px);
+  opacity: 0.2;
+  transition: 0.5s;
+}
+
+.Card:hover .description .arrow svg {
+  transform: translateX(0px);
+  opacity: 1;
+}
+
+@media (max-width: 590px) {
+  .Card {
+    width: 90%;
+    height: auto;
+  }
+  .Card img {
+    position: relative;
+    left: -15px;
+    /* margin: 10px 0px; */
+  }
+  .Card .description {
+    left: 10px;
+  }
+}
+
+@media (max-width: 490px) {
+  .Card {
+    width: 90%;
+    height: fit-content;
+  }
+  .Card img {
+    left: 0px;
+    width: 75px;
+  }
+  .Card .description {
+    left: 15px;
+  }
+}
+
+@media (max-width: 435px) {
+  .Card {
+    width: 90%;
+  }
+}
