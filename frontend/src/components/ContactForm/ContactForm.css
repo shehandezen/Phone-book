@@ -1,0 +1,381 @@
+@import url("../../meta.css");
+
+.form-container {
+  position: relative;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Form {
+  position: relative;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Form form {
+  position: relative;
+  top: 50px;
+  width: auto;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border-radius: 15px;
+  padding: 75px 5px;
+  background: var(--white);
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.2);
+  margin-bottom: 100px;
+  /* transform: translateX(100%); */
+}
+.box {
+  /* border: 1px solid; */
+  width: 485px;
+}
+
+.Form .header {
+  position: relative;
+  font-size: 35px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--brand-color);
+}
+
+.Form .details {
+  position: relative;
+  top: 50px;
+  width: 90%;
+  display: flex;
+  align-items: left;
+  justify-content: center;
+  /* flex-direction: column; */
+  /* border: 1px solid; */
+}
+
+.Form .details .view-group {
+  position: relative;
+  width: 100%;
+  margin: 10px 0px;
+}
+
+.view-group .label {
+  position: relative;
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: var(--font-color);
+}
+
+.view-group .input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.data {
+  position: relative;
+  width: 250px;
+  height: 40px;
+  cursor: pointer;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  margin-right: 10px;
+  padding: 10px;
+  background: var(--white);
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.2);
+  border: none;
+  outline: none;
+  /* border: 1px solid var(--red); */
+}
+
+.fullname .dropdown {
+  position: relative;
+  width: 80px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.social-media .input-group .data {
+  width: 220px;
+}
+
+.social-media .input-group .dropdown {
+  position: relative;
+  width: 175px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.dropdown::before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  right: 28px;
+  width: 10px;
+  height: 2px;
+  background: var(--small-text);
+  transform: rotate(40deg);
+  transition: 0.5s;
+  z-index: 10;
+}
+
+.dropdown.active::before {
+  right: 20px;
+}
+
+.dropdown::after {
+  content: "";
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 10px;
+  height: 2px;
+  background: var(--small-text);
+  transform: rotate(-40deg);
+  transition: 0.5s;
+  z-index: 10;
+}
+
+.social-media .input-group .add {
+  position: relative;
+  top: 0px;
+}
+
+.dropdown.active::after {
+  right: 28px;
+}
+
+.dropdown input {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 10px;
+  background: var(--white);
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.2);
+  border: none;
+  outline: none;
+}
+
+.dropdown .option {
+  position: absolute;
+  top: 45px;
+  width: 100%;
+  background: var(--white);
+  border-radius: 10px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.5s;
+  z-index: 1000;
+}
+
+.dropdown.active .option {
+  visibility: visible;
+  opacity: 1;
+}
+
+.dropdown .option div {
+  padding: 6px 20px;
+  font-weight: 500;
+  color: var(--small-text);
+  cursor: pointer;
+}
+
+.dropdown .option div:hover {
+  background: var(--brand-color);
+  color: var(--white);
+}
+
+.type-label {
+  width: 100px;
+  margin-right: 10px;
+}
+
+.add {
+  position: relative;
+  top: 5px;
+  padding: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  background: var(--brand-color);
+  color: var(--white);
+}
+
+.add:hover {
+  opacity: 0.8;
+}
+
+.address-group {
+  position: relative;
+  /* border: 1px solid; */
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+}
+
+.sub-label {
+  position: relative;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--font-color);
+  margin-right: 10px;
+  margin-left: 15px;
+}
+
+.address-group .input-group {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.submit {
+  position: relative;
+  width: 40%;
+  height: 40px;
+  margin-top: 15px;
+  margin-right: 10px;
+  border-radius: 10px;
+  border: none;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--white);
+  background: var(--brand-color);
+  cursor: pointer;
+}
+
+.submit:hover {
+  opacity: 0.8;
+}
+
+.close {
+  position: relative;
+  width: 40%;
+  height: 40px;
+  margin-top: 15px;
+  border-radius: 10px;
+  border: none;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--white);
+  background: var(--red);
+  cursor: pointer;
+}
+
+.close:hover {
+  opacity: 0.8;
+}
+
+.full-input {
+  position: relative;
+  margin-bottom: 10px;
+  transition: 0.5s;
+}
+
+.remove {
+  position: relative;
+  top: 5px;
+  padding: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  background: var(--red);
+  color: var(--white);
+}
+
+.remove:hover {
+  opacity: 0.8;
+}
+
+.erorr {
+  border: 1px solid var(--red);
+}
+
+.err-msg {
+  position: relative;
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--red);
+}
+
+.profile-image {
+  position: relative;
+  left: 0px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid var(--brand-color);
+  padding: 5px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.image-container {
+  position: relative;
+  left: 25px;
+  /* border: 1px solid; */
+
+  z-index: 100;
+}
+.camera-icon {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 120px;
+  height: 120px;
+  font-size: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--brand-color);
+  z-index: 15;
+  background: var(--font-color);
+  opacity: 0.2;
+  visibility: hidden;
+  transition: 0s;
+}
+
+.image-container:hover .camera-icon {
+  visibility: visible;
+}
+
+@media (max-width: 1025px) {
+  .details {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 550px) {
+  .Form form .header {
+    font-size: 30px;
+  }
+  .Form form {
+    width: 90%;
+  }
+  .details .box {
+    width: 100%;
+  }
+}
+
+@media (max-width: 470px) {
+  .type-label {
+    width: 250px;
+  }
+}

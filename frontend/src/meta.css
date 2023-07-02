@@ -1,0 +1,24 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600&family=Roboto:wght@400;500;900&family=Ubuntu:wght@300;400;500;700&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Josefin Sans", sans-serif;
+  font-family: "Roboto", sans-serif;
+  font-family: "Ubuntu", sans-serif;
+  transition: 0.5s;
+}
+
+:root {
+  --background-color: #fafafa;
+  --white: #fff;
+  --brand-color: #03a9f4;
+  --font-color: #333;
+  --small-text: rgb(56, 56, 56);
+  --red: #dc3545;
+  --google-red: #db4437;
+}
+
+body {
+  background: var(--background-color);
+}

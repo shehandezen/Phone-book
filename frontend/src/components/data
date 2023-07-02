@@ -1,0 +1,44 @@
+{
+    "prefix": "Mr.",
+    "fullName": "Savindu Shehan",
+    "jobTitle": "developer",
+    "phoneNumbers": [
+        {
+            "label": "personal",
+            "phoneNumber": "075436945655"
+        },
+        {
+            "label": "work",
+            "phoneNumber": "011546545655"
+        }
+    ],
+    "email": [
+        {
+            "label": "personal",
+            "email": "savindu@personal.com"
+        },
+        {
+            "label": "work",
+            "email": "savindu@work.com"
+        }
+    ],
+    "postalAddress": {
+        "label": "home",
+        "address": "no 12 , galle rd",
+        "city": "kalutara",
+        "state": "western",
+        "postCode": "12055",
+        "country": "sri lanka"
+    },
+    "date": "2023-07-20",
+    "socialMedia": [
+        {
+            "label": "Twitter",
+            "username": "shehan"
+        },
+        {
+            "label": "Facebook",
+            "username": "savindu"
+        }
+    ]
+}
