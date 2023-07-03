@@ -717,7 +717,7 @@ export const UpdateContact = () => {
                 <button className="submit" type="submit">
                   Save
                 </button>
-                <Link to="/">
+                <Link to="/contact/4">
                   <button type="reset" className="close">
                     Discard
                   </button>
