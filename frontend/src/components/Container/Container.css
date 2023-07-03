@@ -5,9 +5,9 @@
   width: 100%;
   height: auto;
   display: grid;
-  /* grid-template-columns: repeat(1, 1fr); */
+  grid-template-columns: repeat(1, 1fr);
   /* border: 1px solid; */
   z-index: 10;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
+  /* overflow-y: auto; */
 }

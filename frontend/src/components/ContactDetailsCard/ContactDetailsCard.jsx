@@ -86,7 +86,7 @@ export const ContactDetailsCard = () => {
           <Link to="/update/2">
             <Edit3 className="edit-icon" />
           </Link>
-          <Link to="/">
+          <Link to="/contacts">
             <X className="close-icon" />
           </Link>
         </span>
@@ -100,16 +100,11 @@ export const ContactDetailsCard = () => {
               type="text"
               value={`${data.prefix} ${data.fullName}`}
               className="detail-view"
-              disabled
-            />
-            <button
-              className="detail-clip-board"
+              readOnly
               onClick={() => {
                 copy(`${data.prefix} ${data.fullName}`);
               }}
-            >
-              <Clipboard />
-            </button>
+            />
           </div>
 
           <div className="detail-feild">
@@ -127,14 +122,9 @@ export const ContactDetailsCard = () => {
                   type="text"
                   value={phone.phoneNumber}
                   className="detail-view long"
-                  disabled
-                />
-                <button
-                  className="detail-clip-board"
+                  readOnly
                   onClick={() => copy(phone.phoneNumber)}
-                >
-                  <Clipboard />
-                </button>
+                />
               </div>
             ))}
           </div>
@@ -147,14 +137,9 @@ export const ContactDetailsCard = () => {
                   type="text"
                   value={data.jobTitle}
                   className="detail-view "
-                  disabled
-                />
-                <button
-                  className="detail-clip-board"
+                  readOnly
                   onClick={() => copy(data.jobTitle)}
-                >
-                  <Clipboard />
-                </button>
+                />
               </div>
             </div>
           ) : (
@@ -169,14 +154,9 @@ export const ContactDetailsCard = () => {
                   type="text"
                   value={data.date}
                   className="detail-view "
-                  disabled
-                />
-                <button
-                  className="detail-clip-board"
+                  readOnly
                   onClick={() => copy(data.date)}
-                >
-                  <Clipboard />
-                </button>
+                />
               </div>
             </div>
           ) : (
@@ -191,14 +171,9 @@ export const ContactDetailsCard = () => {
                   type="text"
                   value={data.postalAddress.address}
                   className="detail-view "
-                  disabled
-                />
-                <button
-                  className="detail-clip-board"
+                  readOnly
                   onClick={() => copy(data.postalAddress.address)}
-                >
-                  <Clipboard />
-                </button>
+                />
               </div>
 
               <div>
@@ -206,14 +181,9 @@ export const ContactDetailsCard = () => {
                   type="text"
                   value={data.postalAddress.city}
                   className="detail-view "
-                  disabled
-                />
-                <button
-                  className="detail-clip-board"
+                  readOnly
                   onClick={() => copy(data.postalAddress.city)}
-                >
-                  <Clipboard />
-                </button>
+                />
               </div>
 
               <div>
@@ -222,41 +192,26 @@ export const ContactDetailsCard = () => {
                   value={data.postalAddress.state}
                   className="detail-view "
                   disabled
-                />
-                <button
-                  className="detail-clip-board"
                   onClick={() => copy(data.postalAddress.state)}
-                >
-                  <Clipboard />
-                </button>
+                />
               </div>
               <div>
                 <input
                   type="text"
                   value={data.postalAddress.postCode}
                   className="detail-view "
-                  disabled
-                />
-                <button
-                  className="detail-clip-board"
+                  readOnly
                   onClick={() => copy(data.postalAddress.postCode)}
-                >
-                  <Clipboard />
-                </button>
+                />
               </div>
               <div>
                 <input
                   type="text"
                   value={data.postalAddress.country}
                   className="detail-view "
-                  disabled
-                />
-                <button
-                  className="detail-clip-board"
+                  readOnly
                   onClick={() => copy(data.postalAddress.country)}
-                >
-                  <Clipboard />
-                </button>
+                />
               </div>
             </div>
           ) : (
@@ -272,20 +227,15 @@ export const ContactDetailsCard = () => {
                     type="text"
                     value={email.label}
                     className="detail-view short"
-                    disabled
+                    readOnly
                   />
                   <input
                     type="text"
                     value={email.email}
                     className="detail-view long"
-                    disabled
-                  />
-                  <button
-                    className="detail-clip-board"
+                    readOnly
                     onClick={() => copy(email.email)}
-                  >
-                    <Clipboard />
-                  </button>
+                  />
                 </div>
               ))}
             </div>
