@@ -28,7 +28,7 @@ const UpdateContact = () => {
 
   const fetchData = async () => {
     await axios
-      .get(`https://y5sm93-4000.csb.app/contact/${id}`)
+      .get(`${process.env.REACT_APP_API}/contact/${id}`)
       .then((response) => {
         let data = response.data.data.contact[0];
         setFullName(data.fullName);
@@ -346,8 +346,6 @@ const UpdateContact = () => {
     }
   };
 
-  const URI = "https://y5sm93-4000.csb.app/";
-
   const [isLoading, setIsLoading] = useState(false);
 
   const submitHandle = (e) => {
@@ -356,7 +354,7 @@ const UpdateContact = () => {
     buildFormData(formData, userData);
     console.log(formData);
     axios
-      .put(`https://y5sm93-4000.csb.app/contact/${id}`, formData)
+      .put(`${process.env.REACT_APP_API}/contact/${id}`, formData)
       .then((response) => {
         if (response.status == 201) {
           setIsLoading(false);
@@ -395,7 +393,11 @@ const UpdateContact = () => {
                       />
                     ) : (
                       <img
-                        src={thumbnail == undefined ? Avatar : URI + thumbnail}
+                        src={
+                          thumbnail == undefined
+                            ? Avatar
+                            : `${process.env.REACT_APP_API}/${thumbnail}`
+                        }
                         className="profile-image"
                       />
                     )}

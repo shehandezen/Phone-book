@@ -26,7 +26,7 @@ const ContactList = () => {
   console.log(data);
   useEffect(() => {
     axios
-      .get(`https://y5sm93-4000.csb.app/contacts/user/${userId}`)
+      .get(`${process.env.REACT_APP_API}/contacts/user/${userId}`)
       .then((response) => {
         setData(response.data.data.contacts);
       })

@@ -73,13 +73,13 @@ export const ContactDetailsCard = () => {
     setClipboard(true);
     setTimeout(() => setClipboard(false), 2000);
   };
-  const URL = "https://y5sm93-4000.csb.app/";
+  const URL = process.env.REACT_APP_API;
 
   const [showWarn, setShowWarn] = useState(false);
 
   const deleteContact = () => {
     axios
-      .delete(`https://y5sm93-4000.csb.app/contact/${id}`)
+      .delete(`${process.env.REACT_APP_API}/contact/${id}`)
       .then((response) => {
         if (response.status == 204) {
           setShowWarn(false);
@@ -129,7 +129,11 @@ export const ContactDetailsCard = () => {
           </Link>
         </span>
         <img
-          src={data.thumbnail == undefined ? Avatar : URL + data.thumbnail}
+          src={
+            data.thumbnail == undefined
+              ? Avatar
+              : `${process.env.REACT_APP_API}/${data.thumbnail}`
+          }
           className="profile-photo"
         />
         {clipboard ? <div className="clipboard-msg">Copied!</div> : ""}

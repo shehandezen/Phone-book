@@ -318,7 +318,7 @@ const ContactForm = () => {
     buildFormData(formData, userData);
     console.log(formData);
     axios
-      .post("https://y5sm93-4000.csb.app/contact", formData)
+      .post(`${process.env.REACT_APP_API}/contact`, formData)
       .then((response) => {
         if (response.status == 201) {
           setIsLoading(false);
