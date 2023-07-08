@@ -3,10 +3,13 @@ const Contact = require("../../db/models/contact");
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-  console.log(`get contacts api endpoint called by ${req.ip}`);
+router.get("/user/:id", async (req, res) => {
+  console.log(`get contacts api endpoint called by ${req.ip}`, req.params.id);
   try {
-    const contacts = await Contact.find({ fullName: /req.query.name/ });
+    const id = req.params.id;
+    const contacts = await Contact.find({
+      userId: id,
+    });
     res.status(200).json({
       status: "success",
       data: { contacts },

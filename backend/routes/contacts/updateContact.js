@@ -6,6 +6,10 @@ const router = express.Router();
 router.put("/:id", async (req, res) => {
   try {
     console.log(`update contact api endpoint called by ${req.ip}`);
+    if (req.file) {
+      req.body.thumbnail = req.file.path;
+    }
+
     const options = { new: true };
     const updatedContact = await Contact.findByIdAndUpdate(
       req.params.id,
