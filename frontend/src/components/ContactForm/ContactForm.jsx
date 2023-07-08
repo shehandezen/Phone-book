@@ -1,8 +1,14 @@
-import { useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+import { motion } from "framer-motion";
+import axios from "axios";
 
 // icons
 import { Plus, Trash2 } from "react-feather";
+import { Spinner } from "react-spinner-animated";
+
+import "react-spinner-animated/dist/index.css";
 
 // css
 import "./ContactForm.css";
@@ -11,6 +17,13 @@ import "./ContactForm.css";
 import Avatar from "../../assets/avatar.png";
 
 const ContactForm = () => {
+  const navigate = useNavigate();
+  const animation = {
+    initial: { opacity: 0, x: 100 },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: -100 },
+  };
+
   const profileInputRef = useRef(null);
   const [image, setImage] = useState("");
 
@@ -51,13 +64,17 @@ const ContactForm = () => {
   };
 
   const addNewSocial = () => {
-    setSocialMedia([...socialMedia, { label: "", username: "" }]);
+    setSocialMedia([...socialMedia, { label: "Facebook", username: "" }]);
     setSocialDropDown([...socialDropDown, false]);
   };
 
   const changePhoneNumber = (changeValue, i) => {
     const inputdata = [...phoneNumbers];
     inputdata[i].phoneNumber = changeValue.target.value;
+    changeValue.target.setCustomValidity("");
+    if (!changeValue.target.validity.valid) {
+      changeValue.target.setCustomValidity("Phone Number is required");
+    }
     setPhoneNumbers(inputdata);
     console.log(phoneNumbers);
   };
@@ -72,6 +89,10 @@ const ContactForm = () => {
   const changeEmail = (changeValue, i) => {
     const inputdata = [...email];
     inputdata[i].email = changeValue.target.value;
+    changeValue.target.setCustomValidity("");
+    if (!changeValue.target.validity.valid) {
+      changeValue.target.setCustomValidity("Email is required");
+    }
     setEmail(inputdata);
     console.log(email);
   };
@@ -144,6 +165,11 @@ const ContactForm = () => {
   const [fullName, setFullName] = useState("");
 
   const fullNameHadle = (e) => {
+    e.target.setCustomValidity("");
+    if (!e.target.validity.valid) {
+      e.target.setCustomValidity("Full name is required");
+    }
+
     setFullName(e.target.value);
   };
 
@@ -197,6 +223,10 @@ const ContactForm = () => {
     setIEmailLabel(e.target.value);
   };
   const iEmailHandle = (e) => {
+    e.target.setCustomValidity("");
+    if (!e.target.validity.valid) {
+      e.target.setCustomValidity("Email is required");
+    }
     setIEmail(e.target.value);
   };
 
@@ -212,6 +242,10 @@ const ContactForm = () => {
     setIPhoneLabel(e.target.value);
   };
   const iPhoneHandle = (e) => {
+    e.target.setCustomValidity("");
+    if (!e.target.validity.valid) {
+      e.target.setCustomValidity("Phone Number is required");
+    }
     setIPhone(e.target.value);
   };
 
@@ -231,7 +265,10 @@ const ContactForm = () => {
     username: iSocial,
   };
 
+  const [userId, setUserId] = useState("001122");
+
   const userData = {
+    userId: userId,
     prefix: prefix,
     fullName: fullName,
     jobTitle: jobTitle,
@@ -247,35 +284,62 @@ const ContactForm = () => {
     },
     date: date,
     socialMedia: [...socialMedia, firstSocial],
+    image: image,
   };
 
-  const isVaildFullName = () => {
-    if (fullName.length <= 0) {
-      return false;
+  const formData = new FormData();
+
+  const buildFormData = (formData, data, parentKey) => {
+    if (
+      data &&
+      typeof data === "object" &&
+      !(data instanceof Date) &&
+      !(data instanceof File)
+    ) {
+      Object.keys(data).forEach((key) => {
+        buildFormData(
+          formData,
+          data[key],
+          parentKey ? `${parentKey}[${key}]` : key
+        );
+      });
     } else {
-      return true;
+      const value = data == null ? "" : data;
+
+      formData.append(parentKey, value);
     }
   };
 
-  const isVaildPhoneNumber = () => {
-    console.log(iPhone);
-    if (iPhone.length <= 0) {
-      return false;
-    } else {
-      return true;
-    }
-  };
-
-  const [isSubmit, setIsSubmit] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const submitHandle = (e) => {
-    e.preventDefault();
-    setIsSubmit(true);
-    console.log(userData);
+    e.preventDefault(e);
+    setIsLoading(true);
+    buildFormData(formData, userData);
+    console.log(formData);
+    axios
+      .post("https://y5sm93-4000.csb.app/contact", formData)
+      .then((response) => {
+        if (response.status == 201) {
+          setIsLoading(false);
+          navigate("/contacts");
+        }
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        console.log("err", err);
+      });
   };
 
   return (
-    <div className="form-container">
+    <motion.div
+      className="form-container"
+      variants={animation}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+    >
       <div className="Form">
         <form onSubmit={(e) => submitHandle(e)}>
           <div className="header">Add Contact</div>
@@ -330,29 +394,23 @@ const ContactForm = () => {
                   <input
                     type="text"
                     className="data"
-                    class={
-                      isSubmit
-                        ? !isVaildFullName()
-                          ? "erorr data"
-                          : "data "
-                        : "data"
-                    }
+                    class={"data "}
                     placeholder="Full Name"
                     onChange={(e) => fullNameHadle(e)}
+                    // onClick={() => isVaildFullName()}
+                    required
+                    // onInvalid={this.setCustomValidity("Enter User Name Here")}
+                    // onInput={this.setCustomValidity("")}
                   />
                 </div>
-                {isSubmit ? (
-                  !isVaildFullName() ? (
-                    <div className="input-group">
-                      {" "}
-                      <div className="err-msg">Full name is required!</div>
-                    </div>
-                  ) : (
-                    ""
-                  )
+                {/* {!validFullName ? (
+                  <div className="input-group">
+                    {" "}
+                    <div className="err-msg">Full name is required!</div>
+                  </div>
                 ) : (
                   ""
-                )}
+                )} */}
               </div>
               {/* job title */}
               <div className="view-group">
@@ -380,30 +438,21 @@ const ContactForm = () => {
                     id={`val-0`}
                     type="text"
                     placeholder="Phone Number"
-                    class={
-                      isSubmit
-                        ? !isVaildPhoneNumber()
-                          ? "erorr data"
-                          : "data "
-                        : "data"
-                    }
+                    class={"data "}
                     onChange={(e) => iPhoneHandle(e)}
+                    required
                   />
                   <button className="add" onClick={() => addNewPhoneNumber()}>
                     <Plus />
                   </button>
                 </div>
-                {isSubmit ? (
-                  !isVaildPhoneNumber() ? (
-                    <div className="input-group">
-                      <div className="err-msg">Phone number is required!</div>
-                    </div>
-                  ) : (
-                    ""
-                  )
+                {/* {!validPhone ? (
+                  <div className="input-group">
+                    <div className="err-msg">Phone number is required!</div>
+                  </div>
                 ) : (
                   ""
-                )}
+                )} */}
                 {phoneNumbers.map((data, i) => {
                   return (
                     <div className="full-input">
@@ -418,10 +467,13 @@ const ContactForm = () => {
                       <input
                         id={`val-${i}`}
                         type="text"
-                        class="data"
+                        class={"data"}
                         value={data.phoneNumber}
                         placeholder="Phone Number"
-                        onChange={(e) => changePhoneNumber(e, i)}
+                        onChange={(e) => {
+                          changePhoneNumber(e, i);
+                        }}
+                        required
                       />
                       <button
                         className="remove"
@@ -450,6 +502,7 @@ const ContactForm = () => {
                     class="data"
                     placeholder="Email Address"
                     onChange={(e) => iEmailHandle(e)}
+                    required
                   />
                   <button className="add" onClick={() => addEmail()}>
                     <Plus />
@@ -473,6 +526,7 @@ const ContactForm = () => {
                         value={data.email}
                         placeholder="Email Address"
                         onChange={(e) => changeEmail(e, i)}
+                        required
                       />
                       <button className="remove" onClick={() => removeEmail(i)}>
                         <Trash2 />
@@ -591,6 +645,7 @@ const ContactForm = () => {
                       class="data"
                       placeholder="Username"
                       onChange={(e) => iSocialHandle(e)}
+                      required
                     />
                     <button className="add" onClick={() => addNewSocial()}>
                       <Plus />
@@ -635,6 +690,7 @@ const ContactForm = () => {
                           value={data.username}
                           placeholder="Username"
                           onChange={(e) => changeSocialMedia(e, i)}
+                          required
                         />
                         <button
                           className="remove"
@@ -648,7 +704,19 @@ const ContactForm = () => {
                 })}
               </div>
               <div className="input-group">
-                <button className="submit" type="submit">
+                <button className="submit" type="submit" disabled={isLoading}>
+                  {isLoading ? (
+                    <Spinner
+                      bgColor={"rgba(0,0,0,0.5)"}
+                      center={true}
+                      text={"Adding..."}
+                      width={"150px"}
+                      height={"150px"}
+                      styles={{ transform: "translate(-50%,-50%" }}
+                    />
+                  ) : (
+                    ""
+                  )}{" "}
                   Add
                 </button>
                 <Link to="/contacts">
@@ -661,7 +729,7 @@ const ContactForm = () => {
           </div>
         </form>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

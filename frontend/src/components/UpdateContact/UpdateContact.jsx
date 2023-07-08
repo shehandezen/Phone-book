@@ -1,9 +1,14 @@
-import { useState, useRef } from "react";
-import { useLoaderData } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+
+import { motion } from "framer-motion";
+import axios from "axios";
 
 // icons
 import { Plus, Trash2 } from "react-feather";
+import { Spinner } from "react-spinner-animated";
+
+import "react-spinner-animated/dist/index.css";
 
 // css
 import "./UpdateContact.css";
@@ -11,50 +16,52 @@ import "./UpdateContact.css";
 //avatar
 import Avatar from "../../assets/avatar.png";
 
-export const UpdateContact = () => {
-  const data = {
-    prefix: "Mr.",
-    fullName: "Savindu Shehan",
-    jobTitle: "developer",
-    phoneNumbers: [
-      {
-        label: "personal",
-        phoneNumber: "075436945655",
-      },
-    ],
-    email: [
-      {
-        label: "personal",
-        email: "savindu@personal.com",
-      },
-      {
-        label: "work",
-        email: "savindu@work.com",
-      },
-    ],
-    postalAddress: {
-      label: "home",
-      address: "no 12 , galle rd",
-      city: "kalutara",
-      state: "western",
-      postCode: "12055",
-      country: "sri lanka",
-    },
-    date: "2023-07-20",
-    socialMedia: [
-      {
-        label: "Twitter",
-        username: "shehan",
-      },
-      {
-        label: "Facebook",
-        username: "savindu",
-      },
-    ],
+const UpdateContact = () => {
+  const navigate = useNavigate();
+  const animation = {
+    initial: { opacity: 0, x: 100 },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: -100 },
   };
+
+  const { id } = useParams();
+
+  const fetchData = async () => {
+    await axios
+      .get(`https://y5sm93-4000.csb.app/contact/${id}`)
+      .then((response) => {
+        let data = response.data.data.contact[0];
+        setFullName(data.fullName);
+        setThumbnail(data.thumbnail);
+        setPrefix(data.prefix);
+        setJobTitle(data.jobTitle);
+        setIPhone(data.phoneNumbers[0].phoneNumber);
+        setIPhoneLabel(data.phoneNumbers[0].label);
+        setIEmail(data.email[0].email);
+        setIEmailLabel(data.email[0].label);
+        setISocial(data.socialMedia[0].username);
+        setSocial(data.socialMedia[0].label);
+        setDate(data.date);
+        setAddress(data.postalAddress.address);
+        setCity(data.postalAddress.city);
+        setLabel(data.postalAddress.label);
+        setPostCode(data.postalAddress.postCode);
+        setState(data.postalAddress.state);
+        setCountry(data.postalAddress.country);
+        setEmail(data.email.slice(1));
+        setPhoneNumbers(data.phoneNumbers.slice(1));
+        setSocialMedia(data.socialMedia.slice(1));
+      })
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const profileInputRef = useRef(null);
   const [image, setImage] = useState("");
+  const [thumbnail, setThumbnail] = useState();
 
   const profileImageHandle = () => {
     profileInputRef.current.click();
@@ -62,27 +69,16 @@ export const UpdateContact = () => {
 
   const profileImageChange = (e) => {
     const file = e.target.files[0];
-    console.log(file);
+    console.log(file[0]);
     setImage(e.target.files[0]);
   };
 
   const [isActive, setIsActive] = useState(false);
   const [isSocialActive, setIsSocialActive] = useState(false);
 
-  const fetchPhone = [...data.phoneNumbers];
-  fetchPhone.splice(0, 1);
-
-  const [phoneNumbers, setPhoneNumbers] = useState([...fetchPhone]);
-
-  const fetchEmail = [...data.email];
-  fetchEmail.splice(0, 1);
-
-  const [email, setEmail] = useState([...fetchEmail]);
-
-  const fetchSocial = [...data.socialMedia];
-  fetchSocial.splice(0, 1);
-
-  const [socialMedia, setSocialMedia] = useState([...fetchSocial]);
+  const [phoneNumbers, setPhoneNumbers] = useState([]);
+  const [email, setEmail] = useState([]);
+  const [socialMedia, setSocialMedia] = useState([]);
 
   const [socialDropDown, setSocialDropDown] = useState([]);
 
@@ -104,13 +100,17 @@ export const UpdateContact = () => {
   };
 
   const addNewSocial = () => {
-    setSocialMedia([...socialMedia, { label: "", username: "" }]);
+    setSocialMedia([...socialMedia, { label: "Facebook", username: "" }]);
     setSocialDropDown([...socialDropDown, false]);
   };
 
   const changePhoneNumber = (changeValue, i) => {
     const inputdata = [...phoneNumbers];
     inputdata[i].phoneNumber = changeValue.target.value;
+    changeValue.target.setCustomValidity("");
+    if (!changeValue.target.validity.valid) {
+      changeValue.target.setCustomValidity("Phone Number is required");
+    }
     setPhoneNumbers(inputdata);
     console.log(phoneNumbers);
   };
@@ -125,6 +125,10 @@ export const UpdateContact = () => {
   const changeEmail = (changeValue, i) => {
     const inputdata = [...email];
     inputdata[i].email = changeValue.target.value;
+    changeValue.target.setCustomValidity("");
+    if (!changeValue.target.validity.valid) {
+      changeValue.target.setCustomValidity("Email is required");
+    }
     setEmail(inputdata);
     console.log(email);
   };
@@ -173,8 +177,8 @@ export const UpdateContact = () => {
     console.log(socialMedia);
   };
 
-  const [prefix, setPrefix] = useState(data.prefix);
-  const [social, setSocial] = useState(data.socialMedia[0].label);
+  const [prefix, setPrefix] = useState();
+  const [social, setSocial] = useState();
 
   const dropdownClick = () => {
     setIsActive((active) => !active);
@@ -194,24 +198,29 @@ export const UpdateContact = () => {
     setSocial(value);
   };
 
-  const [fullName, setFullName] = useState(data.fullName);
+  const [fullName, setFullName] = useState();
 
   const fullNameHadle = (e) => {
+    e.target.setCustomValidity("");
+    if (!e.target.validity.valid) {
+      e.target.setCustomValidity("Full name is required");
+    }
+
     setFullName(e.target.value);
   };
 
-  const [jobTitle, setJobTitle] = useState(data.jobTitle);
+  const [jobTitle, setJobTitle] = useState();
 
   const jobTitleHandle = (e) => {
     setJobTitle(e.target.value);
   };
 
-  const [label, setLabel] = useState(data.postalAddress.label);
-  const [address, setAddress] = useState(data.postalAddress.address);
-  const [city, setCity] = useState(data.postalAddress.city);
-  const [state, setState] = useState(data.postalAddress.state);
-  const [postCode, setPostCode] = useState(data.postalAddress.postCode);
-  const [country, setCountry] = useState(data.postalAddress.country);
+  const [label, setLabel] = useState();
+  const [address, setAddress] = useState();
+  const [city, setCity] = useState();
+  const [state, setState] = useState();
+  const [postCode, setPostCode] = useState();
+  const [country, setCountry] = useState();
 
   const labelHandle = (e) => {
     setLabel(e.target.value);
@@ -237,19 +246,23 @@ export const UpdateContact = () => {
     setCountry(e.target.value);
   };
 
-  const [date, setDate] = useState(data.date);
+  const [date, setDate] = useState();
 
   const dateHandle = (e) => {
     setDate(e.target.value);
   };
 
-  const [iEmailLabel, setIEmailLabel] = useState(data.email[0].label);
-  const [iEmail, setIEmail] = useState(data.email[0].email);
+  const [iEmailLabel, setIEmailLabel] = useState();
+  const [iEmail, setIEmail] = useState();
 
   const iEmailLabelHandle = (e) => {
     setIEmailLabel(e.target.value);
   };
   const iEmailHandle = (e) => {
+    e.target.setCustomValidity("");
+    if (!e.target.validity.valid) {
+      e.target.setCustomValidity("Email is required");
+    }
     setIEmail(e.target.value);
   };
 
@@ -258,13 +271,17 @@ export const UpdateContact = () => {
     email: iEmail,
   };
 
-  const [iPhoneLabel, setIPhoneLabel] = useState(data.phoneNumbers[0].label);
-  const [iPhone, setIPhone] = useState(data.phoneNumbers[0].phoneNumber);
+  const [iPhoneLabel, setIPhoneLabel] = useState();
+  const [iPhone, setIPhone] = useState();
 
   const iPhoneLabelHandle = (e) => {
     setIPhoneLabel(e.target.value);
   };
   const iPhoneHandle = (e) => {
+    e.target.setCustomValidity("");
+    if (!e.target.validity.valid) {
+      e.target.setCustomValidity("Phone Number is required");
+    }
     setIPhone(e.target.value);
   };
 
@@ -273,7 +290,7 @@ export const UpdateContact = () => {
     phoneNumber: iPhone,
   };
 
-  const [iSocial, setISocial] = useState(data.socialMedia[0].username);
+  const [iSocial, setISocial] = useState();
 
   const iSocialHandle = (e) => {
     setISocial(e.target.value);
@@ -284,7 +301,10 @@ export const UpdateContact = () => {
     username: iSocial,
   };
 
+  const [userId, setUserId] = useState("001122");
+
   const userData = {
+    userId: userId,
     prefix: prefix,
     fullName: fullName,
     jobTitle: jobTitle,
@@ -300,35 +320,64 @@ export const UpdateContact = () => {
     },
     date: date,
     socialMedia: [...socialMedia, firstSocial],
+    image: image,
   };
 
-  const isVaildFullName = () => {
-    if (fullName.length <= 0) {
-      return false;
+  const formData = new FormData();
+
+  const buildFormData = (formData, data, parentKey) => {
+    if (
+      data &&
+      typeof data === "object" &&
+      !(data instanceof Date) &&
+      !(data instanceof File)
+    ) {
+      Object.keys(data).forEach((key) => {
+        buildFormData(
+          formData,
+          data[key],
+          parentKey ? `${parentKey}[${key}]` : key
+        );
+      });
     } else {
-      return true;
+      const value = data == null ? "" : data;
+
+      formData.append(parentKey, value);
     }
   };
 
-  const isVaildPhoneNumber = () => {
-    console.log(iPhone);
-    if (iPhone.length <= 0) {
-      return false;
-    } else {
-      return true;
-    }
-  };
+  const URI = "https://y5sm93-4000.csb.app/";
 
-  const [isSubmit, setIsSubmit] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const submitHandle = (e) => {
-    e.preventDefault();
-    setIsSubmit(true);
-    console.log(userData);
+    e.preventDefault(e);
+    setIsLoading(true);
+    buildFormData(formData, userData);
+    console.log(formData);
+    axios
+      .put(`https://y5sm93-4000.csb.app/contact/${id}`, formData)
+      .then((response) => {
+        if (response.status == 201) {
+          setIsLoading(false);
+          navigate("/contacts");
+        }
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        console.log("err", err);
+      });
   };
 
   return (
-    <div className="form-container">
+    <motion.div
+      className="form-container"
+      variants={animation}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+    >
       <div className="Form">
         <form onSubmit={(e) => submitHandle(e)}>
           <div className="header">Update Contact</div>
@@ -345,7 +394,10 @@ export const UpdateContact = () => {
                         className="profile-image"
                       />
                     ) : (
-                      <img src={Avatar} className="profile-image" />
+                      <img
+                        src={thumbnail == undefined ? Avatar : URI + thumbnail}
+                        className="profile-image"
+                      />
                     )}
                     <span className="camera-icon">📷</span>
                   </div>
@@ -382,30 +434,24 @@ export const UpdateContact = () => {
                   <input
                     type="text"
                     className="data"
-                    class={
-                      isSubmit
-                        ? !isVaildFullName()
-                          ? "erorr data"
-                          : "data "
-                        : "data"
-                    }
-                    value={fullName}
+                    class={"data "}
                     placeholder="Full Name"
                     onChange={(e) => fullNameHadle(e)}
+                    value={fullName}
+                    // onClick={() => isVaildFullName()}
+                    required
+                    // onInvalid={this.setCustomValidity("Enter User Name Here")}
+                    // onInput={this.setCustomValidity("")}
                   />
                 </div>
-                {isSubmit ? (
-                  !isVaildFullName() ? (
-                    <div className="input-group">
-                      {" "}
-                      <div className="err-msg">Full name is required!</div>
-                    </div>
-                  ) : (
-                    ""
-                  )
+                {/* {!validFullName ? (
+                  <div className="input-group">
+                    {" "}
+                    <div className="err-msg">Full name is required!</div>
+                  </div>
                 ) : (
                   ""
-                )}
+                )} */}
               </div>
               {/* job title */}
               <div className="view-group">
@@ -414,8 +460,8 @@ export const UpdateContact = () => {
                   type="text"
                   class="data"
                   placeholder="Job Title"
-                  onChange={(e) => jobTitleHandle(e)}
                   value={jobTitle}
+                  onChange={(e) => jobTitleHandle(e)}
                 />
               </div>
               {/* phone numbers */}
@@ -428,39 +474,29 @@ export const UpdateContact = () => {
                     type="text"
                     class="data type-label"
                     placeholder="Label"
-                    onChange={(e) => iPhoneLabelHandle(e)}
                     value={iPhoneLabel}
+                    onChange={(e) => iPhoneLabelHandle(e)}
                   />
                   <input
                     id={`val-0`}
                     type="text"
                     placeholder="Phone Number"
-                    class={
-                      isSubmit
-                        ? !isVaildPhoneNumber()
-                          ? "erorr data"
-                          : "data "
-                        : "data"
-                    }
-                    onChange={(e) => iPhoneHandle(e)}
+                    class={"data "}
                     value={iPhone}
+                    onChange={(e) => iPhoneHandle(e)}
+                    required
                   />
                   <button className="add" onClick={() => addNewPhoneNumber()}>
                     <Plus />
                   </button>
                 </div>
-                {isSubmit ? (
-                  !isVaildPhoneNumber() ? (
-                    <div className="input-group">
-                      {" "}
-                      <div className="err-msg">Full name is required!</div>
-                    </div>
-                  ) : (
-                    ""
-                  )
+                {/* {!validPhone ? (
+                  <div className="input-group">
+                    <div className="err-msg">Phone number is required!</div>
+                  </div>
                 ) : (
                   ""
-                )}
+                )} */}
                 {phoneNumbers.map((data, i) => {
                   return (
                     <div className="full-input">
@@ -475,10 +511,13 @@ export const UpdateContact = () => {
                       <input
                         id={`val-${i}`}
                         type="text"
-                        class="data"
+                        class={"data"}
                         value={data.phoneNumber}
                         placeholder="Phone Number"
-                        onChange={(e) => changePhoneNumber(e, i)}
+                        onChange={(e) => {
+                          changePhoneNumber(e, i);
+                        }}
+                        required
                       />
                       <button
                         className="remove"
@@ -498,17 +537,18 @@ export const UpdateContact = () => {
                     type="text"
                     class="data type-label"
                     placeholder="Label"
+                    value={iEmailLabel}
                     onChange={(e) => {
                       iEmailLabelHandle(e);
                     }}
-                    value={iEmailLabel}
                   />
                   <input
                     type="text"
                     class="data"
                     placeholder="Email Address"
-                    onChange={(e) => iEmailHandle(e)}
                     value={iEmail}
+                    onChange={(e) => iEmailHandle(e)}
+                    required
                   />
                   <button className="add" onClick={() => addEmail()}>
                     <Plus />
@@ -532,6 +572,7 @@ export const UpdateContact = () => {
                         value={data.email}
                         placeholder="Email Address"
                         onChange={(e) => changeEmail(e, i)}
+                        required
                       />
                       <button className="remove" onClick={() => removeEmail(i)}>
                         <Trash2 />
@@ -552,8 +593,8 @@ export const UpdateContact = () => {
                       type="text"
                       class="data"
                       placeholder="Work"
-                      onChange={(e) => labelHandle(e)}
                       value={label}
+                      onChange={(e) => labelHandle(e)}
                     />
                   </div>
                   <div className="input-group">
@@ -562,8 +603,8 @@ export const UpdateContact = () => {
                       type="text"
                       class="data"
                       placeholder="No 12, Galle Rd."
-                      onChange={(e) => addressHandle(e)}
                       value={address}
+                      onChange={(e) => addressHandle(e)}
                     />
                   </div>
                   <div className="input-group">
@@ -572,8 +613,8 @@ export const UpdateContact = () => {
                       type="text"
                       class="data"
                       placeholder="Colombo"
-                      onChange={(e) => cityHandle(e)}
                       value={city}
+                      onChange={(e) => cityHandle(e)}
                     />
                   </div>
                   <div className="input-group">
@@ -582,8 +623,8 @@ export const UpdateContact = () => {
                       type="text"
                       class="data"
                       placeholder="Western Province"
-                      onChange={(e) => stateHandle(e)}
                       value={state}
+                      onChange={(e) => stateHandle(e)}
                     />
                   </div>
                   <div className="input-group">
@@ -592,8 +633,8 @@ export const UpdateContact = () => {
                       type="text"
                       class="data"
                       placeholder="00100"
-                      onChange={(e) => postCodeHandle(e)}
                       value={postCode}
+                      onChange={(e) => postCodeHandle(e)}
                     />
                   </div>
                   <div className="input-group">
@@ -602,8 +643,8 @@ export const UpdateContact = () => {
                       type="text"
                       class="data"
                       placeholder="Sri Lanka"
-                      onChange={(e) => countryHandle(e)}
                       value={country}
+                      onChange={(e) => countryHandle(e)}
                     />
                   </div>
                 </div>
@@ -614,10 +655,10 @@ export const UpdateContact = () => {
                 <input
                   type="date"
                   class="data"
+                  value={date}
                   onChange={(e) => {
                     dateHandle(e);
                   }}
-                  value={date}
                 />
               </div>
               {/* social media  */}
@@ -651,12 +692,14 @@ export const UpdateContact = () => {
                         </div>
                       </div>
                     </div>
+
                     <input
                       type="text"
                       class="data"
                       placeholder="Username"
-                      onChange={(e) => iSocialHandle(e)}
                       value={iSocial}
+                      onChange={(e) => iSocialHandle(e)}
+                      required
                     />
                     <button className="add" onClick={() => addNewSocial()}>
                       <Plus />
@@ -701,6 +744,7 @@ export const UpdateContact = () => {
                           value={data.username}
                           placeholder="Username"
                           onChange={(e) => changeSocialMedia(e, i)}
+                          required
                         />
                         <button
                           className="remove"
@@ -714,12 +758,24 @@ export const UpdateContact = () => {
                 })}
               </div>
               <div className="input-group">
-                <button className="submit" type="submit">
-                  Save
+                <button className="submit" type="submit" disabled={isLoading}>
+                  {isLoading ? (
+                    <Spinner
+                      bgColor={"rgba(0,0,0,0.5)"}
+                      center={true}
+                      text={"Updating..."}
+                      width={"150px"}
+                      height={"150px"}
+                      styles={{ transform: "translate(-50%,-50%" }}
+                    />
+                  ) : (
+                    ""
+                  )}{" "}
+                  Update
                 </button>
-                <Link to="/contact/4">
+                <Link to="/contacts">
                   <button type="reset" className="close">
-                    Discard
+                    Discard Changes
                   </button>
                 </Link>
               </div>
@@ -727,10 +783,8 @@ export const UpdateContact = () => {
           </div>
         </form>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
-export const UpdateDataLoader = async ({ params }) => {
-  return 0;
-};
+export default UpdateContact;

@@ -4,6 +4,7 @@
   position: relative;
   width: 100vw;
   height: auto;
+  min-height: 90vh;
   /* padding: 10px 35px; */
   padding-top: 50px;
   /* border: 1px solid; */
@@ -22,6 +23,7 @@
   width: 60%;
   font-size: 18px;
   font-weight: 500;
+  margin: 35px 0px;
   color: var(--font-color);
 }
 

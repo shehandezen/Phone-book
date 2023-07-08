@@ -7,7 +7,11 @@ import { UserPlus, Users, LogOut, LogIn } from "react-feather";
 //assets
 import Avatar from "../../assets/avatar.png";
 
-const Header = () => {
+const Header = ({ user }) => {
+  const logout = () => {
+    window.open(`${process.env.SERVER_URL}/google/logout`, "_self");
+  };
+
   const [isHome, setIsHome] = useState(false);
   const [isShowOptions, setIsShowOptions] = useState(false);
   const location = useLocation();
