@@ -24,6 +24,16 @@ const ContactForm = () => {
     exit: { opacity: 0, x: -100 },
   };
 
+  const [user, setUser] = useState("");
+
+  useEffect(() => {
+    if (localStorage.getItem("user")) {
+      setUser(JSON.parse(localStorage.getItem("user")));
+    } else {
+      navigate("/");
+    }
+  }, []);
+
   const profileInputRef = useRef(null);
   const [image, setImage] = useState("");
 
@@ -268,7 +278,7 @@ const ContactForm = () => {
   const [userId, setUserId] = useState("001122");
 
   const userData = {
-    userId: userId,
+    userId: user.userId,
     prefix: prefix,
     fullName: fullName,
     jobTitle: jobTitle,

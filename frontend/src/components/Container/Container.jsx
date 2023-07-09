@@ -1,8 +1,5 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter as Router, Link, use } from "react-router-dom";
-import axios from "axios";
-
-import queryString from "query-string";
+import { BrowserRouter as Router, Link } from "react-router-dom";
 
 import AnimatedRoutes from "../AnimatedRoutes";
 
@@ -15,14 +12,12 @@ import Header from "../Header/Header";
 import FloatBtn from "../FloatBtn/FloatBtn";
 
 const Container = () => {
-  const [user, setUser] = useState(null);
-
   return (
     <div className={"Container"}>
       <Router>
-        <Header user={user} />
+        <Header />
         <div>
-          <AnimatedRoutes user={user} />
+          <AnimatedRoutes />
         </div>
         <Link to={"/add"}>
           <FloatBtn />

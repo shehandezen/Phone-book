@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 import { AnimatePresence } from "framer-motion";
@@ -10,20 +10,31 @@ import ContactDetailsCard from "./ContactDetailsCard/ContactDetailsCard";
 
 import UpdateContact from "./UpdateContact/UpdateContact";
 
-const AnimatedRoutes = ({ user }) => {
+const AnimatedRoutes = () => {
   const location = useLocation();
+  const [user, setUser] = useState();
+  const getUser = async () => {
+    if (localStorage.getItem("user")) {
+      await setUser(JSON.parse(localStorage.getItem("user")));
+    }
+  };
+  useEffect(() => {
+    getUser();
+  });
+
   return (
     <AnimatePresence>
       <Routes path="/" location={location} key={location.pathname}>
-        <Route index path="/" element={<Home user={user} />} />
         <Route
-          path="/contact/:id"
-          element={<ContactDetailsCard user={user} />}
+          index
+          path="/"
+          element={user ? <Navigate to="/contacts" /> : <Home />}
         />
-        <Route path="/contacts" element={<ContactList user={user} />} />
+        <Route path="/contact/:id" element={<ContactDetailsCard />} />
+        <Route path="/contacts" element={<ContactList />} />
 
-        <Route path="/add" element={<ContactForm user={user} />} />
-        <Route path="/update/:id" element={<UpdateContact user={user} />} />
+        <Route path="/add" element={<ContactForm />} />
+        <Route path="/update/:id" element={<UpdateContact />} />
       </Routes>
     </AnimatePresence>
   );

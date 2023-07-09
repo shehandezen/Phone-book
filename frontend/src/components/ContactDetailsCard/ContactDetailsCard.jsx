@@ -15,7 +15,6 @@ import Avatar from "../../assets/avatar.png";
 
 export const ContactDetailsCard = () => {
   const navigate = useNavigate();
-  const [userId, setUserId] = useState("001122");
   const [data, setData] = useState({
     prefix: "",
     fullName: "",
@@ -50,11 +49,22 @@ export const ContactDetailsCard = () => {
   });
   const { id } = useParams();
 
+  const fetchData = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/contact/${id}`)
+      .then((response) => {
+        setData(response.data.data.contact[0]);
+        console.log(response.data.data.contact[0], "response");
+      });
+  };
+
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API}/contact/${id}`).then((response) => {
-      setData(response.data.data.contact[0]);
-      console.log(response.data.data.contact[0], "response");
-    });
+    if (localStorage.getItem("user")) {
+      const user = JSON.parse(localStorage.getItem("user"));
+    } else {
+      navigate("/");
+    }
+    fetchData();
   }, []);
 
   const animation = {

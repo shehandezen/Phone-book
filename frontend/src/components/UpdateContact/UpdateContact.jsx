@@ -54,8 +54,13 @@ const UpdateContact = () => {
       })
       .catch((err) => console.log(err));
   };
-
+  const [user, setUser] = useState("");
   useEffect(() => {
+    if (localStorage.getItem("user")) {
+      setUser(JSON.parse(localStorage.getItem("user")));
+    } else {
+      navigate("/");
+    }
     fetchData();
   }, []);
 
@@ -301,10 +306,8 @@ const UpdateContact = () => {
     username: iSocial,
   };
 
-  const [userId, setUserId] = useState("001122");
-
   const userData = {
-    userId: userId,
+    userId: user.userId,
     prefix: prefix,
     fullName: fullName,
     jobTitle: jobTitle,

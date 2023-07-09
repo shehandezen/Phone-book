@@ -1,5 +1,7 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import queryString from "query-string";
+import axios from "axios";
 import { motion } from "framer-motion";
 
 //css
@@ -11,17 +13,32 @@ import { AtSign } from "react-feather";
 //image
 import HeroImage from "../../assets/hero-image.svg";
 
-const Home = ({ user }) => {
+const Home = () => {
+  const location = useLocation();
+  console.log(location);
+
+  const user = queryString.parse(location.search);
+  console.log(user);
+
   const animation = {
     initial: { opacity: 0, x: 100 },
     animate: { opacity: 1, x: 0 },
     exit: { opacity: 0, x: -100 },
   };
 
-  const googleAuth = () => {
-    window.location.href = `https://y5sm93-4000.csb.app/google/auth`;
+  const navigateAuth = (url) => {
+    window.location.href = url;
   };
-  console.log(user);
+
+  const auth = async () => {
+    await axios
+      .post(process.env.REACT_APP_AUTH_REQUEST)
+      .then((response) => {
+        console.log(response);
+        navigateAuth(response.data.url);
+      })
+      .catch((error) => console.log(error));
+  };
 
   return (
     <motion.div
@@ -36,7 +53,7 @@ const Home = ({ user }) => {
           <div className="Title">Contact Keep</div>
           <div className="tagline">Access your contacts in anywere.</div>
           <Link to="/" className="link">
-            <button className="get-start-btn" onClick={() => googleAuth()}>
+            <button className="get-start-btn" onClick={() => auth()}>
               <AtSign className="sign-icon" />
               Get start with google
             </button>
