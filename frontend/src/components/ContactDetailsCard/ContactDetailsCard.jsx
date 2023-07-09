@@ -51,7 +51,7 @@ export const ContactDetailsCard = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    axios.get(`https://y5sm93-4000.csb.app/contact/${id}`).then((response) => {
+    axios.get(`${process.env.REACT_APP_API}/contact/${id}`).then((response) => {
       setData(response.data.data.contact[0]);
       console.log(response.data.data.contact[0], "response");
     });
