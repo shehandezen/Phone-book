@@ -12,24 +12,11 @@ import UpdateContact from "./UpdateContact/UpdateContact";
 
 const AnimatedRoutes = () => {
   const location = useLocation();
-  const [user, setUser] = useState();
-  const getUser = async () => {
-    if (localStorage.getItem("user")) {
-      await setUser(JSON.parse(localStorage.getItem("user")));
-    }
-  };
-  useEffect(() => {
-    getUser();
-  });
 
   return (
     <AnimatePresence>
       <Routes path="/" location={location} key={location.pathname}>
-        <Route
-          index
-          path="/"
-          element={user ? <Navigate to="/contacts" /> : <Home />}
-        />
+        <Route index path="/" element={<Home />} />
         <Route path="/contact/:id" element={<ContactDetailsCard />} />
         <Route path="/contacts" element={<ContactList />} />
 

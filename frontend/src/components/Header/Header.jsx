@@ -7,6 +7,7 @@ import "./Header.css";
 import { UserPlus, Users, LogOut, LogIn } from "react-feather";
 //assets
 import Avatar from "../../assets/avatar.png";
+import queryString from "query-string";
 
 const Header = () => {
   const [isHome, setIsHome] = useState(false);
@@ -22,6 +23,20 @@ const Header = () => {
     }
     getUser();
   }, [location]);
+
+  useEffect(() => {
+    const query = queryString.parse(location.search);
+    if (
+      Object.hasOwn(query, "access_token") &&
+      Object.hasOwn(query, "userId") &&
+      Object.hasOwn(query, "name") &&
+      Object.hasOwn(query, "email") &&
+      Object.hasOwn(query, "picture")
+    ) {
+      localStorage.setItem("user", JSON.stringify(query));
+      setUser(query);
+    }
+  }, [location.search]);
 
   const getUser = async () => {
     if (localStorage.getItem("user")) {
