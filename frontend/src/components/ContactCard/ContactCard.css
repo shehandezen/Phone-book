@@ -26,6 +26,7 @@
   position: relative;
   right: 35px;
   width: 100px;
+  height: 100px;
   border-radius: 15px;
 }
 
@@ -95,6 +96,7 @@
   .Card img {
     left: 0px;
     width: 75px;
+    height: 75px;
   }
   .Card .description {
     left: 15px;
@@ -104,5 +106,13 @@
 @media (max-width: 435px) {
   .Card {
     width: 90%;
+  }
+
+  .Card .description div .name {
+    font-size: 18px;
+  }
+
+  .Card .description div .phone-number {
+    font-size: 14px;
   }
 }

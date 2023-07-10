@@ -1,23 +1,48 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 //css
 import "./Header.css";
 //icons
 import { UserPlus, Users, LogOut, LogIn } from "react-feather";
 //assets
 import Avatar from "../../assets/avatar.png";
+import queryString from "query-string";
 
 const Header = () => {
   const [isHome, setIsHome] = useState(false);
   const [isShowOptions, setIsShowOptions] = useState(false);
+  const [user, setUser] = useState(null);
   const location = useLocation();
+  const navigate = useNavigate();
   useEffect(() => {
     if (location.pathname == "/") {
       setIsHome(true);
     } else {
       setIsHome(false);
     }
+    getUser();
   }, [location]);
+
+  useEffect(() => {
+    const query = queryString.parse(location.search);
+    if (
+      Object.hasOwn(query, "access_token") &&
+      Object.hasOwn(query, "userId") &&
+      Object.hasOwn(query, "name") &&
+      Object.hasOwn(query, "email") &&
+      Object.hasOwn(query, "picture")
+    ) {
+      localStorage.setItem("user", JSON.stringify(query));
+      setUser(query);
+    }
+  }, [location.search]);
+
+  const getUser = async () => {
+    if (localStorage.getItem("user")) {
+      await setUser(JSON.parse(localStorage.getItem("user")));
+    }
+  };
 
   const showOptions = () => {
     setIsShowOptions((current) => !current);
@@ -28,6 +53,27 @@ const Header = () => {
     setIsShowOptions(false);
     console.log("blured");
   };
+  const navigateAuth = (url) => {
+    window.location.href = url;
+  };
+  const auth = async () => {
+    await axios
+      .post(process.env.REACT_APP_AUTH_REQUEST)
+      .then((response) => {
+        console.log(response);
+        navigateAuth(response.data.url);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const logout = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/google/logout`)
+      .then((response) => {})
+      .catch((err) => console.log(err));
+    localStorage.removeItem("user");
+    navigate("/");
+  };
 
   return (
     <div className="Header">
@@ -37,7 +83,7 @@ const Header = () => {
 
       {isHome ? (
         <div className="profile">
-          <Link to="/" className="drop-link">
+          <Link onClick={() => auth()} className="drop-link">
             <button className="sign-in-btn">
               <LogIn className="sign-in-icon" /> Sign In{" "}
             </button>
@@ -46,8 +92,12 @@ const Header = () => {
       ) : (
         <div>
           <div className="profile">
-            {" "}
-            <img tabIndex={0} src={Avatar} onClick={() => showOptions()} />
+            <div className="email">{user ? user.email : ""} </div>
+            <img
+              tabIndex={0}
+              src={user ? user.picture : Avatar}
+              onClick={() => showOptions()}
+            />
             <div
               className={isShowOptions ? "show-options" : "options"}
               onClick={() => showOptions()}
@@ -65,7 +115,7 @@ const Header = () => {
                   <Users className="dropdown-icon" /> My Contacts
                 </div>
               </Link>
-              <Link to="/logout" className="drop-link">
+              <Link className="drop-link" onClick={() => logout()}>
                 <div>
                   {" "}
                   <LogOut className="dropdown-icon" /> Sign Out

@@ -1,5 +1,8 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import queryString from "query-string";
+import axios from "axios";
+import { motion } from "framer-motion";
 
 // css
 import "./ContactList.css";
@@ -11,52 +14,67 @@ import { UserPlus } from "react-feather";
 import ContactCard from "../ContactCard/ContactCard";
 
 const ContactList = () => {
-  const data = [
-    {
-      id: 1,
-      fullName: "savindu",
-      phoneNumber: "0755463582",
-      thumbnail: "https://www.w3schools.com/w3images/avatar2.png",
-    },
-    {
-      id: 2,
-      fullName: "savindu",
-      phoneNumber: "0755463582",
-      thumbnail: "https://www.w3schools.com/w3images/avatar2.png",
-    },
-    {
-      id: 3,
-      fullName: "savindu",
-      phoneNumber: "0755463582",
-      thumbnail: "https://www.w3schools.com/w3images/avatar2.png",
-    },
-    {
-      id: 4,
-      fullName: "savindu",
-      phoneNumber: "0755463582",
-      thumbnail: "https://www.w3schools.com/w3images/avatar2.png",
-    },
-    {
-      id: 5,
-      fullName: "savindu",
-      phoneNumber: "0755463582",
-      thumbnail: "https://www.w3schools.com/w3images/avatar2.png",
-    },
-    {
-      id: 6,
-      fullName: "savindu",
-      phoneNumber: "0755463582",
-      thumbnail: "https://www.w3schools.com/w3images/avatar2.png",
-    },
-  ];
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const [data, setData] = useState([]);
+
+  const animation = {
+    initial: { opacity: 0, x: 100 },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: -100 },
+  };
+
+  const getContacts = async (id) => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/contacts/user/${id}`, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        setData(response.data.data.contacts);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const initialJob = async () => {
+    const query = queryString.parse(location.search);
+    if (
+      Object.hasOwn(query, "access_token") &&
+      Object.hasOwn(query, "userId") &&
+      Object.hasOwn(query, "name") &&
+      Object.hasOwn(query, "email") &&
+      Object.hasOwn(query, "picture")
+    ) {
+      localStorage.setItem("user", JSON.stringify(query));
+      await getContacts(query.userId);
+    } else {
+      if (localStorage.getItem("user")) {
+        const user = JSON.parse(localStorage.getItem("user"));
+        await getContacts(user.userId);
+      } else {
+        navigate("/");
+      }
+    }
+  };
+
+  useEffect(() => {
+    initialJob();
+  }, [location.search]);
+
   return (
-    <div className="ContactList">
+    <motion.div
+      className="ContactList"
+      variants={animation}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+    >
       {data.length > 0 ? (
         data.map((contact) => (
-          <Link to={`/contact/${contact.id}`} className="link">
+          <Link to={`/contact/${contact._id}`} className="link">
             <ContactCard
               name={contact.fullName}
-              phoneNumber={contact.phoneNumber}
+              phoneNumber={contact.phoneNumbers}
               thumbnail={contact.thumbnail}
             />
           </Link>
@@ -73,7 +91,7 @@ const ContactList = () => {
           </Link>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

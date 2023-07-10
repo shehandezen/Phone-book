@@ -6,6 +6,12 @@ const router = express.Router();
 router.post("/", async (req, res) => {
   try {
     console.log(`add contact api endpoint called by ${req.ip}`);
+    if (req.file) {
+      req.body.thumbnail = req.file.path;
+    }
+
+    console.log(req.file, req.body);
+
     const contact = new Contact(req.body);
     await contact.save();
     res.status(201).json({

@@ -205,7 +205,7 @@ form {
 
 .add {
   position: relative;
-  top: 5px;
+  top: 0px;
   padding: 5px;
   border-radius: 10px;
   cursor: pointer;

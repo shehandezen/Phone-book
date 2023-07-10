@@ -1,16 +1,11 @@
-import { useState } from "react";
-import { useLoaderData, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+
+import { motion } from "framer-motion";
 
 //icons
-import {
-  Clipboard,
-  Facebook,
-  Twitter,
-  Instagram,
-  Edit3,
-  X,
-  Phone,
-} from "react-feather";
+import { Facebook, Twitter, Instagram, Edit3, X, Trash2 } from "react-feather";
 
 //css
 import "./ContactDetailsCard.css";
@@ -19,57 +14,67 @@ import "./ContactDetailsCard.css";
 import Avatar from "../../assets/avatar.png";
 
 export const ContactDetailsCard = () => {
-  const copy = (value) => {
-    navigator.clipboard.writeText(value);
-    triggerClipButton();
-  };
-  const data = {
-    prefix: "Mr.",
-    fullName: "Savindu Shehan",
-    jobTitle: "developer",
+  const navigate = useNavigate();
+  const [data, setData] = useState({
+    prefix: "",
+    fullName: "",
+    jobTitle: "",
     phoneNumbers: [
       {
-        label: "personal",
-        phoneNumber: "075436945655",
-      },
-      {
-        label: "work",
-        phoneNumber: "011546545655",
+        label: "",
+        phoneNumber: "",
       },
     ],
     email: [
       {
-        label: "personal",
-        email: "savindu@personal.com",
-      },
-      {
-        label: "work",
-        email: "savindu@work.com",
+        label: "",
+        email: "",
       },
     ],
     postalAddress: {
-      label: "home",
-      address: "no 12 , galle rd",
-      city: "kalutara",
-      state: "western",
-      postCode: "12055",
-      country: "sri lanka",
+      label: "",
+      address: "",
+      city: "",
+      state: "",
+      postCode: "",
+      country: "",
     },
-    date: "2023-07-20",
+    date: "",
     socialMedia: [
       {
-        label: "Twitter",
-        username: "shehan",
-      },
-      {
-        label: "Facebook",
-        username: "savindu",
-      },
-      {
-        label: "Instagram",
-        username: "savindu",
+        label: "",
+        username: "",
       },
     ],
+  });
+  const { id } = useParams();
+
+  const fetchData = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/contact/${id}`)
+      .then((response) => {
+        setData(response.data.data.contact[0]);
+        console.log(response.data.data.contact[0], "response");
+      });
+  };
+
+  useEffect(() => {
+    if (localStorage.getItem("user")) {
+      const user = JSON.parse(localStorage.getItem("user"));
+    } else {
+      navigate("/");
+    }
+    fetchData();
+  }, []);
+
+  const animation = {
+    initial: { opacity: 0, x: 100 },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: -100 },
+  };
+  const copy = (value) => {
+    navigator.clipboard.writeText(value);
+    triggerClipButton();
   };
 
   const [clipboard, setClipboard] = useState(false);
@@ -78,19 +83,69 @@ export const ContactDetailsCard = () => {
     setClipboard(true);
     setTimeout(() => setClipboard(false), 2000);
   };
+  const URL = process.env.REACT_APP_API;
+
+  const [showWarn, setShowWarn] = useState(false);
+
+  const deleteContact = () => {
+    axios
+      .delete(`${process.env.REACT_APP_API}/contact/${id}`)
+      .then((response) => {
+        if (response.status == 204) {
+          setShowWarn(false);
+          navigate("/contacts");
+        }
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
-    <div className="contact-details-card">
+    <motion.div
+      className="contact-details-card"
+      variants={animation}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+    >
+      {showWarn ? (
+        <div className="warn-wrapper">
+          <div className="warn-card">
+            <div className="warn-msg">
+              Are you sure to delete {data.fullName} ?{" "}
+            </div>
+            <div className="btns">
+              <button className="positive" onClick={() => deleteContact()}>
+                Yes, delete
+              </button>
+              <button className="negative" onClick={() => setShowWarn(false)}>
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+
       <div className="card">
         <span className="operate-btns">
-          <Link to="/update/2">
+          <Link to={`/update/${id}`}>
             <Edit3 className="edit-icon" />
           </Link>
+
+          <Trash2 className="close-icon" onClick={() => setShowWarn(true)} />
           <Link to="/contacts">
             <X className="close-icon" />
           </Link>
         </span>
-        <img src={Avatar} className="profile-photo" />
+        <img
+          src={
+            data.thumbnail == undefined
+              ? Avatar
+              : `${process.env.REACT_APP_API}/${data.thumbnail}`
+          }
+          className="profile-photo"
+        />
         {clipboard ? <div className="clipboard-msg">Copied!</div> : ""}
 
         <div className="details-box">
@@ -116,6 +171,7 @@ export const ContactDetailsCard = () => {
                   type="text"
                   value={phone.label}
                   className="detail-view short"
+                  placeholder="Label"
                   disabled
                 />
                 <input
@@ -171,6 +227,7 @@ export const ContactDetailsCard = () => {
                   type="text"
                   value={data.postalAddress.address}
                   className="detail-view "
+                  placeholder="Address"
                   readOnly
                   onClick={() => copy(data.postalAddress.address)}
                 />
@@ -181,6 +238,7 @@ export const ContactDetailsCard = () => {
                   type="text"
                   value={data.postalAddress.city}
                   className="detail-view "
+                  placeholder="City"
                   readOnly
                   onClick={() => copy(data.postalAddress.city)}
                 />
@@ -191,6 +249,7 @@ export const ContactDetailsCard = () => {
                   type="text"
                   value={data.postalAddress.state}
                   className="detail-view "
+                  placeholder="State"
                   disabled
                   onClick={() => copy(data.postalAddress.state)}
                 />
@@ -200,6 +259,7 @@ export const ContactDetailsCard = () => {
                   type="text"
                   value={data.postalAddress.postCode}
                   className="detail-view "
+                  placeholder="Post Code"
                   readOnly
                   onClick={() => copy(data.postalAddress.postCode)}
                 />
@@ -209,6 +269,7 @@ export const ContactDetailsCard = () => {
                   type="text"
                   value={data.postalAddress.country}
                   className="detail-view "
+                  placeholder="Country"
                   readOnly
                   onClick={() => copy(data.postalAddress.country)}
                 />
@@ -220,13 +281,14 @@ export const ContactDetailsCard = () => {
 
           {data.email !== [] ? (
             <div className="detail-feild">
-              <div className="detail-label"></div>
+              <div className="detail-label">Email</div>
               {data.email.map((email) => (
                 <div>
                   <input
                     type="text"
                     value={email.label}
                     className="detail-view short"
+                    placeholder="Label"
                     readOnly
                   />
                   <input
@@ -243,6 +305,7 @@ export const ContactDetailsCard = () => {
             ""
           )}
 
+          <div className="detail-label">Social media</div>
           {data.socialMedia !== [] ? (
             <div className="social-group">
               {data.socialMedia
@@ -281,12 +344,8 @@ export const ContactDetailsCard = () => {
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
-export const dataLoader = async ({ params }) => {
-  return 0;
-};
-
-// export default ContactDetailsCard;
+export default ContactDetailsCard;

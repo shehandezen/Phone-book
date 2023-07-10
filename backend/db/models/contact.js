@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const contactSchema = new mongoose.Schema({
   id: String,
   userId: String,
+  thumbnail: String,
+  prefix: String,
   fullName: {
     type: String,
     required: true,
@@ -11,20 +13,16 @@ const contactSchema = new mongoose.Schema({
   phoneNumbers: [
     {
       label: String,
-      number: {
-        type: String,
-        required: true,
-      },
+      phoneNumber: String,
     },
   ],
-  emailAddresses: [
+  email: [
     {
       label: String,
       email: String,
     },
   ],
-  thumbnail: String,
-  postalAddresses: {
+  postalAddress: {
     label: String,
     address: String,
     city: String,
@@ -32,11 +30,13 @@ const contactSchema = new mongoose.Schema({
     postCode: String,
     country: String,
   },
-
-  prefix: String,
-
-  birthday: { year: Number, month: Number, day: Number },
-  imAddresses: [{ username: String, service: String }],
+  date: String,
+  socialMedia: [
+    {
+      label: String,
+      username: String,
+    },
+  ],
 });
 
 const Contact = mongoose.model("Contact", contactSchema);

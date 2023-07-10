@@ -43,6 +43,14 @@
   border-radius: 50%;
   cursor: pointer;
 }
+.Header .profile .email {
+  position: relative;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--small-text);
+  top: 20px;
+  right: 100px;
+}
 
 .Header .profile .options {
   position: relative;
@@ -159,6 +167,13 @@
   height: 20px;
   margin-right: 5px;
   transition: 0s;
+}
+
+@media (max-width: 525px) {
+  .Header .profile .email {
+    visibility: hidden;
+    display: none;
+  }
 }
 
 @media (max-width: 350px) {
