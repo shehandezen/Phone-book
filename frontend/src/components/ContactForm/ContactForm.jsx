@@ -327,6 +327,7 @@ const ContactForm = () => {
     setIsLoading(true);
     buildFormData(formData, userData);
     console.log(formData);
+    axios.defaults.withCredentials = true;
     axios
       .post(`${process.env.REACT_APP_API}/contact`, formData)
       .then((response) => {

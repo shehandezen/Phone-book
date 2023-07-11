@@ -92,7 +92,9 @@ const Header = () => {
       ) : (
         <div>
           <div className="profile">
-            <div className="email">{user ? user.email : ""} </div>
+            <div className="email">
+              {user ? `${user.email.slice(0, 20)}...` : ""}{" "}
+            </div>
             <img
               tabIndex={0}
               src={user ? user.picture : Avatar}
