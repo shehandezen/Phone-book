@@ -14,6 +14,7 @@ import "./ContactDetailsCard.css";
 import Avatar from "../../assets/avatar.png";
 
 export const ContactDetailsCard = () => {
+  axios.defaults.withCredentials = true;
   const navigate = useNavigate();
   const [data, setData] = useState({
     prefix: "",
