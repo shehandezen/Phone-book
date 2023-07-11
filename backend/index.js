@@ -79,11 +79,11 @@ dbConnect(process.env.MONGODB_URL);
 
 // routes
 app.use("/contacts", isLoggedIn, getContacts);
-app.use("/contact", getContactById);
-app.use("/contact", upload.single("image"), addContact);
-app.use("/contact", updateContact);
-app.use("/contact", deleteContact);
-app.use("/user", getUser);
+app.use("/contact", isLoggedIn, getContactById);
+app.use("/contact", isLoggedIn, upload.single("image"), addContact);
+app.use("/contact", isLoggedIn, updateContact);
+app.use("/contact", isLoggedIn, deleteContact);
+app.use("/user", isLoggedIn, getUser);
 app.use("/user", currentUser);
 // app.use("/google", auth);
 app.use("/google", requestAuth);
