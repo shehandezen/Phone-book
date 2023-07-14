@@ -62,7 +62,7 @@ const UpdateContact = () => {
       navigate("/");
     }
     fetchData();
-  },[navigate, fetchData]);
+  },[navigate]);
 
   const profileInputRef = useRef(null);
   const [image, setImage] = useState("");
