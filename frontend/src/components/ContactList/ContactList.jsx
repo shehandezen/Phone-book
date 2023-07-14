@@ -59,7 +59,7 @@ const ContactList = () => {
 
   useEffect(() => {
     initialJob();
-  }, [navigate]);
+  }, [navigate, initialJob]);
 
   return (
     <motion.div
