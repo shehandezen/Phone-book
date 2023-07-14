@@ -32,7 +32,7 @@ const ContactForm = () => {
     } else {
       navigate("/");
     }
-  });
+  },[navigate]);
 
   const profileInputRef = useRef(null);
   const [image, setImage] = useState("");

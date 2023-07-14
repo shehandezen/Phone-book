@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
 
@@ -67,7 +67,7 @@ const Home = () => {
         </div>
       </div>
       <div className="hero-image">
-        <img src={HeroImage} alt="Hero-image" />
+        <img src={HeroImage} alt="Hero" />
       </div>
     </motion.div>
   );
