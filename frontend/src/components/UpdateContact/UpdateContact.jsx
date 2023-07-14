@@ -62,7 +62,7 @@ const UpdateContact = () => {
       navigate("/");
     }
     fetchData();
-  }, []);
+  });
 
   const profileInputRef = useRef(null);
   const [image, setImage] = useState("");
@@ -359,7 +359,7 @@ const UpdateContact = () => {
     axios
       .put(`${process.env.REACT_APP_API}/contact/${id}`, formData)
       .then((response) => {
-        if (response.status == 201) {
+        if (response.status === 201) {
           setIsLoading(false);
           navigate("/contacts");
         }
@@ -393,15 +393,17 @@ const UpdateContact = () => {
                       <img
                         src={URL.createObjectURL(image)}
                         className="profile-image"
+                        alt="thumbnail"
                       />
                     ) : (
                       <img
                         src={
-                          thumbnail == undefined
+                          thumbnail === undefined
                             ? Avatar
                             : `${process.env.REACT_APP_API}/${thumbnail}`
                         }
                         className="profile-image"
+                        alt="thumbnail"
                       />
                     )}
                     <span className="camera-icon">📷</span>
