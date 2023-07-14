@@ -15,7 +15,7 @@ const ContactCard = ({ name, phoneNumber, thumbnail }) => {
 
   return (
     <div className="Card">
-      <img src={thumbnail == undefined ? Avatar : `${URL}/${thumbnail}`} />
+      <img src={thumbnail === undefined ? Avatar : `${URL}/${thumbnail}`}  alt=""Thumbnail />
       <div className="description">
         <div>
           <div className="name">{name}</div>
