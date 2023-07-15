@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 
 import { motion } from "framer-motion";
 import axios from "axios";
@@ -17,6 +17,7 @@ import "./UpdateContact.css";
 import Avatar from "../../assets/avatar.png";
 
 const UpdateContact = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const animation = {
     initial: { opacity: 0, x: 100 },
@@ -62,7 +63,7 @@ const UpdateContact = () => {
       navigate("/");
     }
     fetchData();
-  },[navigate, fetchData]);
+  }, [location]);
 
   const profileInputRef = useRef(null);
   const [image, setImage] = useState("");

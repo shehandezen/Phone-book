@@ -32,7 +32,7 @@ const ContactForm = () => {
     } else {
       navigate("/");
     }
-  },[navigate]);
+  }, []);
 
   const profileInputRef = useRef(null);
   const [image, setImage] = useState("");
@@ -275,8 +275,6 @@ const ContactForm = () => {
     username: iSocial,
   };
 
- 
-
   const userData = {
     userId: user.userId,
     prefix: prefix,
@@ -368,7 +366,11 @@ const ContactForm = () => {
                         alt="thumbnail"
                       />
                     ) : (
-                      <img src={Avatar} className="profile-image" alt="thumbnail" />
+                      <img
+                        src={Avatar}
+                        className="profile-image"
+                        alt="thumbnail"
+                      />
                     )}
                     <span className="camera-icon">📷</span>
                   </div>
