@@ -5,6 +5,8 @@ const multer = require("multer");
 const expressSession = require("express-session");
 const cookieSession = require("cookie-session");
 const cookieParser = require("cookie-parser");
+const MongoStore = require("connect-mongo");
+const mongoose = require("mongoose");
 require("dotenv").config();
 
 const upload = multer({ dest: "uploads/" });
@@ -36,21 +38,24 @@ app.use(
     credentials: true,
   })
 );
-app.enable('trust proxy')
-app.set("trust proxy", 1);
+
 app.use(
-  expressSession({
-    secret: 'secrete',
+  cookieSession({
+    secret: "secrete",
     resave: false,
     saveUninitialized: true,
-    name: 'session',
+    name: "session",
     cookie: {
-        secure: true,
-        sameSite: 'none',
-        maxAge: 1000*60*60*24*7,
-        domain: '.onrender.com'
-    }
-})
+      secure: true,
+      sameSite: "none",
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+    },
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URL,
+      ttl: 14 * 24 * 60 * 60,
+      autoRemove: "native",
+    }),
+  })
 );
 
 app.use((req, res, next) => {
