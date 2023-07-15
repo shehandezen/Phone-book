@@ -31,7 +31,7 @@ app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 app.use(
   cors({
-    origin: "https://3y9h2p-3000.csb.app",
+    origin: process.env.CLIENT_URL,
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
@@ -42,12 +42,11 @@ app.use(
     name: "session",
     keys: ["secret"],
     maxAge: 7 * 24 * 60 * 60 * 1000,
-   
-  })
+   })
 );
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://3y9h2p-3000.csb.app");
+  res.header("Access-Control-Allow-Origin", process.env.CLIENT_URL);
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization,  X-PINGOTHER"
