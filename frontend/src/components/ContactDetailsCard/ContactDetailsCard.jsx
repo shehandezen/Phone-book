@@ -66,7 +66,7 @@ export const ContactDetailsCard = () => {
       navigate("/");
     }
     fetchData();
-  });
+  }, []);
 
   const animation = {
     initial: { opacity: 0, x: 100 },
