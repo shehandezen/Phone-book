@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import queryString from "query-string";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
 
@@ -14,7 +13,7 @@ import { AtSign } from "react-feather";
 import HeroImage from "../../assets/hero-image.svg";
 
 const Home = () => {
-  const location = useLocation();
+
   const navigate = useNavigate();
 
   const animation = {
@@ -23,7 +22,7 @@ const Home = () => {
     exit: { opacity: 0, x: -100 },
   };
 
-  const [user, setUser] = useState();
+
   const getUser = async () => {
     if (localStorage.getItem("user")) {
       navigate("/contacts");
@@ -68,7 +67,7 @@ const Home = () => {
         </div>
       </div>
       <div className="hero-image">
-        <img src={HeroImage} />
+        <img src={HeroImage} alt="Hero" />
       </div>
     </motion.div>
   );

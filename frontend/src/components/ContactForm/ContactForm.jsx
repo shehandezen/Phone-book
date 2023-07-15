@@ -32,7 +32,7 @@ const ContactForm = () => {
     } else {
       navigate("/");
     }
-  }, []);
+  },[navigate]);
 
   const profileInputRef = useRef(null);
   const [image, setImage] = useState("");
@@ -275,7 +275,7 @@ const ContactForm = () => {
     username: iSocial,
   };
 
-  const [userId, setUserId] = useState("001122");
+ 
 
   const userData = {
     userId: user.userId,
@@ -331,7 +331,7 @@ const ContactForm = () => {
     axios
       .post(`${process.env.REACT_APP_API}/contact`, formData)
       .then((response) => {
-        if (response.status == 201) {
+        if (response.status === 201) {
           setIsLoading(false);
           navigate("/contacts");
         }
@@ -365,9 +365,10 @@ const ContactForm = () => {
                       <img
                         src={URL.createObjectURL(image)}
                         className="profile-image"
+                        alt="thumbnail"
                       />
                     ) : (
-                      <img src={Avatar} className="profile-image" />
+                      <img src={Avatar} className="profile-image" alt="thumbnail" />
                     )}
                     <span className="camera-icon">📷</span>
                   </div>

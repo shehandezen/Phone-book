@@ -11,7 +11,7 @@ const FloatBtn = () => {
   const [isHome, setIsHome] = useState(false);
   const location = useLocation();
   useEffect(() => {
-    if (location.pathname == "/") {
+    if (location.pathname === "/") {
       setIsHome(true);
     } else {
       setIsHome(false);

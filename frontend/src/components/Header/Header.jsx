@@ -16,7 +16,7 @@ const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   useEffect(() => {
-    if (location.pathname == "/") {
+    if (location.pathname === "/") {
       setIsHome(true);
     } else {
       setIsHome(false);
@@ -49,10 +49,10 @@ const Header = () => {
     console.log("clicked");
   };
 
-  const hideOptions = () => {
-    setIsShowOptions(false);
-    console.log("blured");
-  };
+  // const hideOptions = () => {
+  //   setIsShowOptions(false);
+  //   console.log("blured");
+  // };
   const navigateAuth = (url) => {
     window.location.href = url;
   };
@@ -99,6 +99,7 @@ const Header = () => {
               tabIndex={0}
               src={user ? user.picture : Avatar}
               onClick={() => showOptions()}
+              alt="user"
             />
             <div
               className={isShowOptions ? "show-options" : "options"}

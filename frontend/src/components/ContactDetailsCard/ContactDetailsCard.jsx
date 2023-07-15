@@ -61,12 +61,12 @@ export const ContactDetailsCard = () => {
 
   useEffect(() => {
     if (localStorage.getItem("user")) {
-      const user = JSON.parse(localStorage.getItem("user"));
+      //const user = JSON.parse(localStorage.getItem("user"));
     } else {
       navigate("/");
     }
     fetchData();
-  }, []);
+  });
 
   const animation = {
     initial: { opacity: 0, x: 100 },
@@ -84,7 +84,6 @@ export const ContactDetailsCard = () => {
     setClipboard(true);
     setTimeout(() => setClipboard(false), 2000);
   };
-  const URL = process.env.REACT_APP_API;
 
   const [showWarn, setShowWarn] = useState(false);
 
@@ -92,7 +91,7 @@ export const ContactDetailsCard = () => {
     axios
       .delete(`${process.env.REACT_APP_API}/contact/${id}`)
       .then((response) => {
-        if (response.status == 204) {
+        if (response.status === 204) {
           setShowWarn(false);
           navigate("/contacts");
         }
@@ -141,11 +140,12 @@ export const ContactDetailsCard = () => {
         </span>
         <img
           src={
-            data.thumbnail == undefined
+            data.thumbnail === undefined
               ? Avatar
               : `${process.env.REACT_APP_API}/${data.thumbnail}`
           }
           className="profile-photo"
+          alt="thumbnail"
         />
         {clipboard ? <div className="clipboard-msg">Copied!</div> : ""}
 
@@ -310,7 +310,7 @@ export const ContactDetailsCard = () => {
           {data.socialMedia !== [] ? (
             <div className="social-group">
               {data.socialMedia
-                .filter((media) => media.label == "Facebook")
+                .filter((media) => media.label === "Facebook")
                 .map((social) => (
                   <a
                     href={`https://www.facebook.com/${social.username}`}
@@ -320,7 +320,7 @@ export const ContactDetailsCard = () => {
                   </a>
                 ))}
               {data.socialMedia
-                .filter((media) => media.label == "Twitter")
+                .filter((media) => media.label === "Twitter")
                 .map((social) => (
                   <a
                     href={`https://www.twitter.com/${social.username}`}
@@ -330,7 +330,7 @@ export const ContactDetailsCard = () => {
                   </a>
                 ))}
               {data.socialMedia
-                .filter((media) => media.label == "Instagram")
+                .filter((media) => media.label === "Instagram")
                 .map((social) => (
                   <a
                     href={`https://www.instagram.com/${social.username}`}
