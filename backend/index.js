@@ -46,7 +46,7 @@ app.use(
     resave: false,
     saveUninitialized: true,
     proxy: true, 
-    name: 'MyCoolWebAppCookieName', 
+   cookie: {
       secure: true, 
       httpOnly: false,
       sameSite: 'none'
