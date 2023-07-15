@@ -40,18 +40,17 @@ app.enable('trust proxy')
 app.set("trust proxy", 1);
 app.use(
   cookieSession({
-    name: "session",
-    keys: ["secret"],
-    maxAge: 7 * 24 * 60 * 60 * 1000,
+    secret: 'secrete',
     resave: false,
     saveUninitialized: true,
-    proxy: true, 
-   cookie: {
-      secure: true, 
-      httpOnly: false,
-      sameSite: 'none'
+    name: 'session',
+    cookie: {
+        secure: true,
+        sameSite: 'none',
+        maxAge: 1000*60*60*24*7,
+        domain: '.onrender.com'
     }
-  })
+})
 );
 
 app.use((req, res, next) => {
