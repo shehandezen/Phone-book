@@ -104,7 +104,10 @@ app.use("/google", oauth);
 
 // api endpoints
 app.use("/", (req, res) => {
-  res.status(200).json(req.session.profile);
+  console.log("root api endpoint.")
+  res.status(200).json({
+    data: req.session.profile
+  });
 });
 
 app.listen(PORT, () => {
