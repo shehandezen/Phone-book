@@ -29,6 +29,7 @@ const ContactList = () => {
     await axios
       .get(`${process.env.REACT_APP_API}/contacts/user/${id}`, {
         withCredentials: true,
+         credentials: "same-origin",
       })
       .then((response) => {
         setData(response.data.data.contacts);
