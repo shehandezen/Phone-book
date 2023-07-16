@@ -78,9 +78,10 @@ const isLoggedIn = (req, res, next) => {
     console.log("user logged in.");
     next();
   } else {
-    res.status(401).json({
-      status: "not authorized",
-    });
+    next()
+    // res.status(401).json({
+    //   status: "not authorized",
+    // });
   }
 };
 
