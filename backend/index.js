@@ -104,7 +104,7 @@ app.use("/google", oauth);
 
 // api endpoints
 app.use("/", (req, res) => {
-  res.status(200).send("<h2>ContactKeep online service</h2>");
+  res.status(200).json(req.session.profile);
 });
 
 app.listen(PORT, () => {
